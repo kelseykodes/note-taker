@@ -181,10 +181,3 @@ if (window.location.pathname === '/notes') {
 }
 
 getAndRenderNotes();
-
-
-
-// note taker:
-// set up server 
-// 2 html routes
-//2 api routes

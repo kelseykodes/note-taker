@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
-// var router = express.Router();
+const router = express.Router();
 const PORT = process.env.PORT || 5500;
 
-//use = middleware
+// middleware for JSON parsing and urlencoded form data
 app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-//get route - show user what data has been save to the page
-app.get('/home', (req, res) =>
+
+//GET route for the main page
+app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/index.html'))
 );
 
@@ -19,6 +22,11 @@ app.get('/notes', (req, res) =>
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} !`)
 );
+
+
+
+
+
 
 
 
