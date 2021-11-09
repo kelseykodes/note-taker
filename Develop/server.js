@@ -1,8 +1,9 @@
 const express = require('express');
-const path = require('path')
+const path = require('path');
 const app = express();
-const router = express.Router();
-// const uuid = require('./helpers/uuid');
+const fs = require('fs');
+const { v4:uuidv4 } = require('uuid');
+// const router = express.Router();
 const PORT = process.env.PORT || 5500;
 
 // middleware for JSON parsing and urlencoded form data
@@ -20,14 +21,11 @@ app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
 
-// Helper function
-const uuid = () => {
-  return Math.floor((1 + Math.random()) * 0x10000)
-    .toString(16)
-    .substring(1);
-};
-
-app.post('/notes', (req, res) => {
+app.get('/api/notes', (req, res) => {
+  const data = JSON.parse(fs.readFileSync("./db/db.json","utf-8"));
+  res.json(data);
+})
+app.post('/api/notes', (req, res) => {
   // Informs client that a POST request was received
   res.json(`${req.method} request received to add your new note`);
 
@@ -37,14 +35,13 @@ app.post('/notes', (req, res) => {
   // Destructuring assignment for the items in req.body
   const addNote = req.body;
 
-  // if (addNote) {
+  // if (addNote) {}
 
-  // }
-  //giving new not an id
-  addNote.id = uuid()
+  //giving new note an id
+  addNote.id = uuidv4();
 
   // Read notes 
-  const data = JSON.parse(fs.readFileSync("./db/db.json"));
+  const data = JSON.parse(fs.readFileSync("./db/db.json","utf-8"));
 
   // Push new note to file
   data.push(addNote);
@@ -64,24 +61,3 @@ app.listen(PORT, () =>
 );
 
 
-
-
-
-
-
-// app.get('/api/reviews', (req, res) => {
-//     // Inform the client
-//     res.json(`${req.method} request received to get reviews`);
-  
-//     // Log our request to the terminal
-//     console.info(`${req.method} request received to get reviews`);
-//   });
-
-// //post route - allow user to type notes and save it 
-// app.post('/api/reviews', (req, res) => {
-//     // Inform the client that their POST request was received
-//     res.json(`${req.method} request received to add a review`);
-  
-//     // Log our request to the terminal
-//     console.info(`${req.method} request received to add a review`);
-//   });
